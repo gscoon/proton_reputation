@@ -1,0 +1,44 @@
+Return-Path: <2017062818244549a62a320d354447818b28158020p0na-C19WUOQGH538F3@bounces.amazon.com>
+X-Original-To: dcl@protonmail.com
+Received: from a15-197.smtp-out.amazonses.com (a15-197.smtp-out.amazonses.com
+ [54.240.15.197]) (using TLSv1 with cipher ECDHE-RSA-AES128-SHA (128/128 bits)) (No
+ client certificate requested) by mail5i.protonmail.ch (Postfix) with ESMTPS id 834E81611
+ for <dcl@protonmail.com>; Wed, 28 Jun 2017 14:24:48 -0400 (EDT)
+Authentication-Results: mail5i.protonmail.ch; dmarc=pass (p=quarantine dis=none)
+ header.from=amazon.com
+Authentication-Results: mail5i.protonmail.ch; spf=pass
+ smtp.mailfrom=2017062818244549a62a320d354447818b28158020p0na-C19WUOQGH538F3@bounces.amazon.com
+Authentication-Results: mail5i.protonmail.ch; dkim=pass (1024-bit key)
+ header.d=amazon.com header.i=@amazon.com header.b="eVI5Ulpc"; dkim=pass (1024-bit key)
+ header.d=amazonses.com header.i=@amazonses.com header.b="AAODPVgR"
+Dkim-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+ s=taugkdi5ljtmsua4uibbmo5mda3r2q3v; d=amazon.com; t=1498674286;
+ h=Date:From:To:Message-ID:Subject:MIME-Version:Content-Type;
+ bh=3GnViQUd73cZhAoSSdugJgXQZojDPthyXDyQqTUCMOU=;
+ b=eVI5UlpcntK2RhULkojt5fODJtqc0HWpzvLvK91DLyfuOyHDNprbM1jbGETlt7ED
+ GIruPF5THtAtvMJ68csCgUcB26Sh6A0KKR/csvQhW1YjJhhRyrwJuG8YlDF9o+EAwGV
+ WheEHd0VnYPnWNUK4XMDp9/LqsCGqKADIuheh4bE=
+Dkim-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+ s=224i4yxa5dv7c2xz3womw6peuasteono; d=amazonses.com; t=1498674286;
+ h=Date:From:To:Message-ID:Subject:MIME-Version:Content-Type:Feedback-ID;
+ bh=3GnViQUd73cZhAoSSdugJgXQZojDPthyXDyQqTUCMOU=;
+ b=AAODPVgRFuoTdHoTOUsFixIw4f/+73NUYvfrj86XXQzb1CeB899ZNvuXG9wCTJNM
+ nSNlSUvkgSiUFQERDCG8RjOOiC3YbpVl803AIyLbOM5BnoumfNhEnEjuIcylKfCwH7/
+ euYSeJ0hopgouuC8G56vYMKsh2QpQl6rkYSRHeCg=
+Date: Wed, 28 Jun 2017 18:24:45 +0000
+From: "Amazon.com" <store-news@amazon.com>
+To: "dcl@protonmail.com" <dcl@protonmail.com>
+Message-Id: <0100015ceff2cc13-c842b0b2-084f-4aba-988d-8b5452261d69-000000@email.amazonses.com>
+Subject: Last chance to save on $5 magazines
+Mime-Version: 1.0
+Content-Type: text/html
+X-Amazon-Rte-Version: 2.0
+X-Amazon-Metadata: CA=C19WUOQGH538F3-CU=A116WV4PRGDUG2-RI=A3NH5XN3W1IV5P
+Bounces-To: 2017062818244549a62a320d354447818b28158020p0na-C19WUOQGH538F3@bounces.amazon.com
+X-Amazon-Mail-Relay-Type: merchandizing
+X-Original-Messageid: <urn.correios.msg.2017062818244549a62a320d354447818b28158020p0na@1498674285517.mms-na-m4e-f1e553e2.us-east-1.amazon.com>
+X-Ses-Outgoing: 2017.06.28-54.240.15.197
+Feedback-Id: 1.us-east-1.+gzE1S+MWTFXXYmwxo7wkk651GMxMPAUFYiyN/09X40=:AmazonSES
+X-Spam-Status: No, score=-7.6 required=4.0 tests=DKIM_SIGNED,DKIM_VALID,
+ DKIM_VALID_AU,HTML_MESSAGE,RCVD_IN_DNSWL_NONE,SPF_PASS,USER_IN_DEF_SPF_WL autolearn=ham
+ autolearn_force=no version=3.4.1

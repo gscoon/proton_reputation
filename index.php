@@ -1,11 +1,16 @@
 <?php
-	$DBH = new PDO("mysql:host=localhost;dbname=proton", "admin", "ronnie");
-	$STH = $DBH->query('Show tables');
-	# setting the fetch mode
-	$STH->setFetchMode(PDO::FETCH_OBJ);
+	ini_set('display_errors', 1);
+	ini_set('display_startup_errors', 1);
+	error_reporting(E_ALL);
 
-	# showing the results
-	while($row = $STH->fetch()) {
-	    var_dump($row);
-	}
+	include "inc/db.php";
+	include "inc/email.php";
+
+	$result = $db->getDomainReputation("google.com");
+	// echo $result[0]['domain'];
+
+	$emailHeader = file_get_contents('./email_header.txt');
+
+	$parsed = $emailHandler->doParse($emailHeader);
+	var_dump($parsed);
 ?>
