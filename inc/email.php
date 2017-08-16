@@ -66,6 +66,12 @@ class EmailHandler {
 		$auth = array("dkim"=>False, "spf"=>False);
 		$parsed = $this->extractHeadersAndRawBody($email);
 
+		if(isset($parsed['to']) && count($parsed['to']) > 0){
+			preg_match('/\<(.*?)\>/', $parsed['to'][0], $toMatch);
+			$auth['to'] = $toMatch[1];
+		}
+
+
 		if(!isset($parsed) || !isset($parsed['authentication-results']) || !is_array($parsed['authentication-results'])){
 		  return $auth;
 		}
@@ -74,18 +80,23 @@ class EmailHandler {
 
 			$spfStr = " spf=pass ";
 			if(strpos($row, $spfStr) !== false){
-				$auth['spf'] = true;
+				$auth['spf'] = $this->getHeaderDomain($row);
 			}
 
 			$dkimStr = " dkim=pass ";
 			if(strpos($row, $dkimStr) !== false){
-				$auth['dkim'] = true;
+				$auth['dkim'] = $this->getHeaderDomain($row);
 			}
 
 		}
 
 		return $auth;
 
+	}
+
+	function getHeaderDomain($headerLine){
+		$results = preg_match("/@([^\s]+)/", $headerLine, $output_array);
+		return $output_array[1];
 	}
 
 	function pickRow($arr, $key, $val){

@@ -9,7 +9,9 @@
 			$user = "admin";
 			$password = "ronnie";
 
-			$this->conn = new PDO("mysql:host=$host;dbname=$dbname", $user, $password);
+			$opt = array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION);
+
+			$this->conn = new PDO("mysql:host=$host;dbname=$dbname", $user, $password, $opt);
 
 		}
 
@@ -20,10 +22,28 @@
 			}
 		}
 
-		function getDomainReputation($domain){
-			$sth = $this->conn->prepare('SELECT * FROM Reputation WHERE domain = ?');
-			$sth->execute(array($domain));
-			return $sth->fetchAll();
+		function getDomainReputation($domain, $authType = false){
+			$q = 'SELECT * FROM Reputation WHERE domain = ?';
+			if($authType){
+				$q .= " AND auth_type = ?";
+			}
+
+			$stmt = $this->conn->prepare($q);
+			$stmt->execute(array($domain, $authType));
+
+			return $stmt->fetchAll();
+		}
+
+
+		function getUserByAddress($email){
+			$q = "SELECT * FROM User WHERE address = ?";
+			$stmt = $this->conn->prepare($q);
+			$stmt->execute(array($email));
+			return $stmt->fetch();
+		}
+
+		function getAllUsers(){
+
 		}
 
 
