@@ -3,15 +3,19 @@
 	ini_set('display_startup_errors', 1);
 	error_reporting(E_ALL);
 
+	const SPAM_ASSASSIN_THRESHOLD = 4;
+
 	include "inc/db.php";
 	include "inc/email.php";
 
 	// receive email header
-	$emailContent = file_get_contents('./email_header.txt');
+	$emailHeader = file_get_contents('./email_header.txt');
 
 	echo '<pre>';
 
-	$parsed = $emailHandler->doParse($emailContent);
+	$parsed = $emailHandler->parseHeader($emailHeader);
+
+	// var_dump($parsed);
 
 	$u = $db->getUserByAddress($parsed['to']);
 	if(!$u){
@@ -19,29 +23,54 @@
 		return;
 	}
 
-	$maxReputation = 0;
+	$spam = array("score"=>0, "domain"=>null, "auth"=>null);
 
 	if($parsed['spf']){
 		$result = $db->getDomainReputation($parsed['spf'], 'spf');
 		if($result){
-			$maxReputation = $result[0]['reputation'];
+			$spam['score'] = $result[0]['score'];
+			$spam['domain'] = $parsed['spf'];
+			$spam['auth'] = 'spf';
+			$spam['reputation'] = $result[0];
 		}
 	}
 
 	if($parsed['dkim']){
 		$result = $db->getDomainReputation($parsed['dkim'], 'dkim');
-		if($result && $result[0]['reputation'] > $maxReputation){
-			$maxReputation = $result[0]['reputation'];
+		if($result && $result[0]['score'] > $spam){
+			$spam['score'] = $result[0]['score'];
+			$spam['domain'] = $parsed['dkim'];
+			$spam['auth'] = 'dkim';
+			$spam['reputation'] = $result[0];
 		}
 	}
 
-	echo "$maxReputation > " . $u['spam_threshold'] . " <br>";
+	// if domain not authenticated...
+	if(!$spam['domain']){
+		echo 'Domain not authenticated';
+		return;
+	}
 
-	if($maxReputation > $u['spam_threshold']){
+	$messageData = array(
+		"body"=>"",
+		"header"=>$emailHeader,
+		"spamScore"=>$parsed['spamScore'],
+		"isSpam"=>true,
+		"authType"=>$spam['auth']
+	);
+
+	if($spam['score'] > $u['spam_threshold']){
+		$messageData['isSpam'] = false;
 		echo 'Domain is good';
 	}
-	else {
-		echo 'Domain is bad';
-	}
+
+
+	$newReputation = $emailHandler->calculateReputation($spam['reputation'], $messageData['isSpam'], false);
+
+	// var_dump($newReputation);
+	$db->updateDomainReputation($newReputation);
+
+	$db->addNewMessage($messageData, $u['UserID']);
+
 
 ?>

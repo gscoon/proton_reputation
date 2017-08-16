@@ -62,15 +62,19 @@ class EmailHandler {
 
 
 
-	function doParse($email){
-		$auth = array("dkim"=>False, "spf"=>False);
-		$parsed = $this->extractHeadersAndRawBody($email);
+	function parseHeader($header){
+		$auth = array("dkim"=>null, "spf"=>null, "spamScore"=>null, "senderDomain"=>null);
+		$parsed = $this->extractHeadersAndRawBody($header);
 
 		if(isset($parsed['to']) && count($parsed['to']) > 0){
 			preg_match('/\<(.*?)\>/', $parsed['to'][0], $toMatch);
 			$auth['to'] = $toMatch[1];
 		}
 
+		if($parsed['x-spam-status']){
+			preg_match('/score\=([-\.0-9]+)/', $parsed['x-spam-status'][0], $score);
+			$auth['spamScore'] = (float) $score[1];
+		}
 
 		if(!isset($parsed) || !isset($parsed['authentication-results']) || !is_array($parsed['authentication-results'])){
 		  return $auth;
@@ -107,6 +111,37 @@ class EmailHandler {
 		}
 
 		return false;
+	}
+
+	function calculateReputation($currentData, $isSpam, $isManual){
+		// good = autononspam + manualnonspam − manualspam
+		// total = autospam + autononspam
+		// reputation = (100 ∗ good)/total
+		$newData = $currentData;
+
+		$countColumns = array(
+			array("count_autononspam", "count_autospam"),
+			array("count_manual_nonspam", "count_manual_spam"),
+		);
+
+		$incColumn = $countColumns[$isManual][$isSpam];
+
+		// echo '<br>'. $incColumn . '<br>';
+
+		$newData[$incColumn] = (int) $newData[$incColumn];
+		$newData[$incColumn]++;
+
+		$newData['total'] = (int) $newData['total'];
+
+		if(!$isManual){
+			$newData['total']++;
+		}
+
+		$good = (int)$currentData[$countColumns[0][0]] + (int)$currentData[$countColumns[1][0]] - (int)$currentData[$countColumns[1][1]];
+		
+		$newData['score'] = (100 * $good)/$newData['total'];
+
+		return $newData;
 	}
 
 }
