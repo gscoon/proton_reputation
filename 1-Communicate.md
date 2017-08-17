@@ -17,9 +17,9 @@ Traditional spam fighting systems rely on tracking lists of IP addresses.  Each 
 
 To answer the first question above, the paper proposes that email service providers use two techniques to authenticate users - SPF and DKIM.  They both rely on domain names.
 
-SPF allows the senders to specify which IP addresses are associated with a given domain name.  The recipient can then check that list and authenticate the sender.  This is accomplished using DNS entries.
+SPF allows the sender to specify which IP addresses are associated with a given domain name.  The recipient can then check that list and authenticate the sender.  This is accomplished using DNS entries.
 
-DKIM relies on public key encryption.  Key peices of the email are used to create a hash.  That hash is then encrypted using the sender's private key.  The signature is added to the email header.  The recipient used DNS to find the sender's public key and then validates the signature.
+DKIM relies on public key encryption.  Key peices of the email are used to create a hash.  That hash is then encrypted using the sender's private key.  The signature is added to the email header.  The recipient uses DNS to find the sender's public key and then validates the signature.
 
 *** Senders can and should use both techniques.
 
