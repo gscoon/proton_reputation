@@ -7,7 +7,7 @@ This paper seeks to answer two questions related to email service providers:
 2. Once you've got a high degree of certainty that the senders are who they say they are, how do you rate the likelihood of the senders' message being spam? (Reputation)
 
 
-Traditional spam fighting systems rely on tracking lists of IP addresses.  Each IP address is associated with an email server.  There can be lists that track good IP addressed (ie Those that are unlikely to produce spam) and there are lists that track bad IP addresses (i.e. Those likely to produce spam).  The challenge with these lists is that
+Traditional spam fighting systems rely on tracking lists of IP addresses.  Each IP address is associated with an email server.  You can use lists to track good IP addressed (ie Those that are unlikely to produce spam) and other lists that track bad IP addresses (i.e. Those likely to produce spam).  The challenge with these lists is that
 
 * they have to be manually updated
 * it assumes email servers maintain the same IP address (not the case!)
@@ -17,7 +17,7 @@ Traditional spam fighting systems rely on tracking lists of IP addresses.  Each 
 
 To answer the first question above, the paper proposes that email service providers use two techniques to authenticate users - SPF and DKIM.  They both rely on domain names.
 
-SPF allows the senders to specify which IP addressed are associated with a given domain name.  The recipient can then check that list and authenticate the sender.
+SPF allows the senders to specify which IP addresses are associated with a given domain name.  The recipient can then check that list and authenticate the sender.
 
 DKIM relies on public key encryption.  Key peices of the email are used to create a hash.  That hash is then encrypted using the sender's private key.  The signature is added to the email header.  The recipient used DNS to find the sender's public key and then validates the signature.
 

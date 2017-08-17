@@ -1,8 +1,8 @@
 # Assignment
 
-1. 1-Communicate.md
-2. 2-Design.md
-3.
+1. Please read the __1-Communicate.md__ file.
+2. Please read the __2-Design.md__ file.
+3. Please run the code in the following files:
 	* new.php => handles a new message
 	* spamify.php => adds a message to spam
 	* unspamify.php => removes a message from spam

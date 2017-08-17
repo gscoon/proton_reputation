@@ -21,7 +21,7 @@
 8. The reputation score is recalculated and updated in the Reputation table
 
 
-### Process: Manual Spam
+### Process: Manual Spam Tag
 1. User clicks "Make Spam" or "Not Spam" button
 2. That action is posted to the server
 3. The server receives the action and the message ID
