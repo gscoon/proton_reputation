@@ -3,8 +3,6 @@
 	ini_set('display_startup_errors', 1);
 	error_reporting(E_ALL);
 
-	const SPAM_ASSASSIN_THRESHOLD = 4;
-
 	// include 2 remote classes
 	include "inc/db.php";
 	include "inc/email.php";
@@ -24,6 +22,9 @@
 
 	// used to store repuation data for authenticated domain
 	$auth = null;
+
+	// find the domain reputation for each authentication type
+	// use whichever one has the highest score
 
 	if($parsed['spf']){
 		$result = $db->getDomainReputation($parsed['spf'], 'spf');
@@ -63,9 +64,11 @@
 		"domain"=>$auth['domain'],
 	);
 
+	// determine whether the message goes to spam or notice
+	// compare domain score to user's spam threshold
+
 	if($auth['score'] > $u['spam_threshold']){
 		$messageData['isSpam'] = false;
-		echo 'Domain is good';
 	}
 
 	// calcuate the domain name's new reputation

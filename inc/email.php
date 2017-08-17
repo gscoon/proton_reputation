@@ -1,66 +1,9 @@
 <?php
 
+// Class to handle common email / message functions
+// Inspired by https://github.com/daniele-occhipinti/php-email-parser/blob/master/PlancakeEmailParser.php
+
 class EmailHandler {
-
-	function extractHeadersAndRawBody($content){
-		$lines = preg_split("/(\r?\n|\r)/", $content);
-
-		$currentHeader = '';
-
-		$rawFields = Array();
-
-		$i = 0;
-		foreach ($lines as $line)
-		{
-		  if($this->isNewLine($line))
-		  {
-				// end of headers
-				$this->rawBodyLines = array_slice($lines, $i);
-				break;
-		  }
-
-		  if ($this->isLineStartingWithPrintableChar($line)) // start of new header
-		  {
-				preg_match('/([^:]+): ?(.*)$/', $line, $matches);
-				$newHeader = strtolower($matches[1]);
-				$value = $matches[2];
-
-				if(!isset($rawFields[$newHeader]) || !is_array($rawFields[$newHeader])){
-					 $rawFields[$newHeader] = Array();
-					 $currentArrayIndex = 0;
-				}
-				else{
-					 $currentArrayIndex = count($rawFields[$newHeader]);
-				}
-
-				$rawFields[$newHeader][$currentArrayIndex] = $value;
-				$currentHeader = $newHeader;
-		  }
-		  else // more lines related to the current header
-		  {
-				if ($currentHeader) { // to prevent notice from empty lines
-					 $rawFields[$currentHeader][count($rawFields[$currentHeader]) - 1] .= ' ' . substr($line, 1);
-				}
-		  }
-		  $i++;
-		}
-
-		return $rawFields;
-
-	}
-
-	function isNewLine($line){
-		$line = str_replace("\r", '', $line);
-		$line = str_replace("\n", '', $line);
-
-		return (strlen($line) === 0);
-	}
-
-	function isLineStartingWithPrintableChar($line){
-		return preg_match('/^[A-Za-z]/', $line);
-	}
-
-
 
 	function parseHeader($header){
 		$auth = array("dkim"=>null, "spf"=>null, "spamScore"=>null, "senderDomain"=>null);
@@ -147,6 +90,64 @@ class EmailHandler {
 		$newData['score'] = (100 * $good)/$newData['total'];
 
 		return $newData;
+	}
+
+	function extractHeadersAndRawBody($content){
+		$lines = preg_split("/(\r?\n|\r)/", $content);
+
+		$currentHeader = '';
+
+		$rawFields = Array();
+
+		$i = 0;
+		foreach ($lines as $line)
+		{
+		  if($this->isNewLine($line))
+		  {
+				// end of headers
+				$this->rawBodyLines = array_slice($lines, $i);
+				break;
+		  }
+
+		  if ($this->isLineStartingWithPrintableChar($line)) // start of new header
+		  {
+				preg_match('/([^:]+): ?(.*)$/', $line, $matches);
+				$newHeader = strtolower($matches[1]);
+				$value = $matches[2];
+
+				if(!isset($rawFields[$newHeader]) || !is_array($rawFields[$newHeader])){
+					 $rawFields[$newHeader] = Array();
+					 $currentArrayIndex = 0;
+				}
+				else{
+					 $currentArrayIndex = count($rawFields[$newHeader]);
+				}
+
+				$rawFields[$newHeader][$currentArrayIndex] = $value;
+				$currentHeader = $newHeader;
+		  }
+		  else // more lines related to the current header
+		  {
+				if ($currentHeader) { // to prevent notice from empty lines
+					 $rawFields[$currentHeader][count($rawFields[$currentHeader]) - 1] .= ' ' . substr($line, 1);
+				}
+		  }
+		  $i++;
+		}
+
+		return $rawFields;
+
+	}
+
+	function isNewLine($line){
+		$line = str_replace("\r", '', $line);
+		$line = str_replace("\n", '', $line);
+
+		return (strlen($line) === 0);
+	}
+
+	function isLineStartingWithPrintableChar($line){
+		return preg_match('/^[A-Za-z]/', $line);
 	}
 
 }

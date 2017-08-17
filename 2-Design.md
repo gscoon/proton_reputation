@@ -1,15 +1,13 @@
 # Design a Reputation System
 
 ### Data tables (See SQL directory)
-
-1. __User__: Stores the information for each user of your email service
-2. __Message__: Stores each message
+1. __User__: Stores the information for each user of your email service.  Each user has his/her individual spam threshold.
+2. __Message__: Stores each message with authentication type and domain name
 3. __Reputation__: Stores counts and scores related to reputation by domain name
 4. __User_Spam_Action__: Tracks user events related to marking and unmarking spam for specific messages
 
 
 ### Process: New Mail
-
 1. A message is received.
 2. DNS lookups are performed for both DKIM and SPF (assuming the sender uses both)
 3. If the domain names are authenticated, proceed with the updated mail headers

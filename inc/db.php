@@ -15,12 +15,6 @@
 
 		}
 
-		function getTables(){
-			$stmt = $this->conn->query('SHOW TABLES;');
-			while ($row = $stmt->fetch()){
-			    var_dump($row);
-			}
-		}
 
 		function getDomainReputation($domain, $authType = false){
 			$q = 'SELECT * FROM Reputation WHERE domain = ?';
@@ -49,8 +43,6 @@
 				":score" => $reputation['score'],
 			);
 
-			// var_dump($data);
-
 			$stmt = $this->conn->prepare($q);
 			return $stmt->execute($data);
 		}
@@ -68,8 +60,6 @@
 				":authType"=> $messageData['authType'],
 				":domain"=> $messageData['domain'],
 			);
-
-			var_dump($data);
 
 			$q = "INSERT INTO Message (UserID, Time, SpamScore, Body, Header, isSpam, AuthType, Domain) VALUES (:userID, :time, :spamScore, :body, :header, :isSpam, :authType, :domain)";
 
