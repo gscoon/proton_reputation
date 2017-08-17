@@ -3,9 +3,9 @@
 1. Please read the __1-Communicate.md__ file.
 2. Please read the __2-Design.md__ file.
 3. Please run the code in the following files:
-	* new.php => handles a new message
-	* spamify.php => adds a message to spam
-	* unspamify.php => removes a message from spam
+	* __new.php__ => handles a new message
+	* __spamify.php__ => adds a message to spam
+	* __unspamify.php__ => removes a message from spam
 
 
 
