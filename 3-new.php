@@ -64,7 +64,7 @@
 		"domain"=>$auth['domain'],
 	);
 
-	// determine whether the message goes to spam or notice
+	// determine whether the message goes to spam
 	// compare domain score to user's spam threshold
 
 	if($auth['score'] > $u['spam_threshold']){
