@@ -1,13 +1,13 @@
 <html>
 	<body>
 		<div>
-			<a href="new.php">New Email</a>
+			<a href="3-new.php">New Email</a>
 		</div>
 		<div>
-			<a href="spamify.php">Spamify</a>
+			<a href="3-spamify.php">Spamify</a>
 		</div>
 		<div>
-			<a href="unspamify.php">Unspamify</a>
+			<a href="3-unspamify.php">Unspamify</a>
 		</div>
 	</body>
 </html>
