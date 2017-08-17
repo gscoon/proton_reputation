@@ -66,11 +66,12 @@
 				":spamScore"=> $messageData['spamScore'],
 				":isSpam"=> $messageData['isSpam'],
 				":authType"=> $messageData['authType'],
+				":domain"=> $messageData['domain'],
 			);
 
 			var_dump($data);
 
-			$q = "INSERT INTO Message (UserID, Time, SpamScore, Body, Header, isSpam, AuthType) VALUES (:userID, :time, :spamScore, :body, :header, :isSpam, :authType)";
+			$q = "INSERT INTO Message (UserID, Time, SpamScore, Body, Header, isSpam, AuthType, Domain) VALUES (:userID, :time, :spamScore, :body, :header, :isSpam, :authType, :domain)";
 
 			$stmt = $this->conn->prepare($q);
 			return $stmt->execute($data);
@@ -89,19 +90,39 @@
 			$q = "SELECT * FROM User_Spam_Action WHERE user_id = ? AND message_id = ?";
 			$stmt = $this->conn->prepare($q);
 			$stmt->execute(array($userID, $messageID));
-			return $stmt->fetchAll();
+			return $stmt->fetch();
+		}
+
+
+		function getEmailByID($id){
+			$q = "SELECT * FROM Message WHERE MessageID = ?";
+			$stmt = $this->conn->prepare($q);
+			$stmt->execute(array($id));
+			return $stmt->fetch();
+		}
+
+
+		function updateMessageSpamStatus($messageID, $isSpam){
+			$q = "UPDATE Message SET isSpam = ? WHERE MessageID = ?";
+			$stmt = $this->conn->prepare($q);
+			return $stmt->execute(array($isSpam, $messageID));
+		}
+
+
+		function addUserSpamAction($userID, $messageID, $isSpam){
+			$q = "INSERT INTO User_Spam_Action (user_id, message_id, is_spam, timestamp) VALUES (?,?,?,?)";
+			$ts = date("Y-m-d H:i:s");
+			$stmt = $this->conn->prepare($q);
+			return $stmt->execute(array($userID, $messageID, $isSpam, $ts));
 		}
 
 
 		function setUserSpamAction($userID, $messageID, $isSpam){
-
+			$q = "UPDATE User_Spam_Action SET is_spam = ?, timestamp = ? WHERE message_id = ? AND user_id = ?";
+			$ts = date("Y-m-d H:i:s");
+			$stmt = $this->conn->prepare($q);
+			return $stmt->execute(array($isSpam, $ts, $messageID, $userID));
 		}
-
-
-		function getAllUsers(){
-
-		}
-
 
 	}
 

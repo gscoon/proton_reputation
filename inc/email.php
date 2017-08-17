@@ -113,7 +113,7 @@ class EmailHandler {
 		return false;
 	}
 
-	function calculateReputation($currentData, $isSpam, $isManual){
+	function calculateReputation($currentData, $isSpam, $isManual, $flippedSpam = false){
 		// good = autononspam + manualnonspam − manualspam
 		// total = autospam + autononspam
 		// reputation = (100 ∗ good)/total
@@ -126,10 +126,15 @@ class EmailHandler {
 
 		$incColumn = $countColumns[$isManual][$isSpam];
 
-		// echo '<br>'. $incColumn . '<br>';
-
 		$newData[$incColumn] = (int) $newData[$incColumn];
 		$newData[$incColumn]++;
+
+		// if user changes his/her mind on spam
+		if($flippedSpam){
+			$decColum = $countColumns[true][!$isSpam];
+			$newData[$decColum] = (int) $newData[$decColum];
+			$newData[$decColum]++;
+		}
 
 		$newData['total'] = (int) $newData['total'];
 
@@ -138,7 +143,7 @@ class EmailHandler {
 		}
 
 		$good = (int)$currentData[$countColumns[0][0]] + (int)$currentData[$countColumns[1][0]] - (int)$currentData[$countColumns[1][1]];
-		
+
 		$newData['score'] = (100 * $good)/$newData['total'];
 
 		return $newData;
