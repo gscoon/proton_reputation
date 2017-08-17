@@ -17,7 +17,7 @@ Traditional spam fighting systems rely on tracking lists of IP addresses.  Each 
 
 To answer the first question above, the paper proposes that email service providers use two techniques to authenticate users - SPF and DKIM.  They both rely on domain names.
 
-SPF allows the senders to specify which IP addresses are associated with a given domain name.  The recipient can then check that list and authenticate the sender.
+SPF allows the senders to specify which IP addresses are associated with a given domain name.  The recipient can then check that list and authenticate the sender.  This is accomplished using DNS entries.
 
 DKIM relies on public key encryption.  Key peices of the email are used to create a hash.  That hash is then encrypted using the sender's private key.  The signature is added to the email header.  The recipient used DNS to find the sender's public key and then validates the signature.
 
@@ -38,7 +38,7 @@ reputation = (100 ∗ good)/total
 The reputation score ends up being between 0 and 100, where 100 is least likely to send spam.  The score is then compared to a threshold.  If it's greater than the threshold, the message will be placed in the inbox.  If not, the message will be placed in the spam folder.
 
 #### Benefits
-1. The entire process (authentication and reputation) is automated for the mail service provider - so no more maintaining lists.
+1. The entire process (authentication and reputation) is automated for the email service provider - so no more maintaining lists.
 2. Each user can impact the reputation scores by manually tagging messages as spam or not spam
 3. Email systems can be set up so that each user can have his / her own threshold
 
